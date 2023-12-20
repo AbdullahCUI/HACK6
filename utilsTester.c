@@ -1,37 +1,68 @@
+/**
+ * This function is used to determine if two integer
+ * numbers are "close enough" to each other; specifically
+ * if their difference is 1 or less.
+ */
+static int isCloseInt(int x, int y) {
+  return abs(x - y) <= 1;
+}
 
 /**
- * This is a collection of unit tests and
- * test functions for a color utilities C
- * library.
+ * assert that for any random r, g, b, converting from RGB->CMYK->RGB
+ * doesn't change the values
  */
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <stddef.h>
-#include <setjmp.h>
-#include <math.h>
-#include <cmocka.h>
-#include <time.h>
+static void testRandomCyclicalEquality(void **state) {
+    srandom(time(NULL));
 
-#include "colorUtils.h"
+    for (int i = 0; i < RANDOM_TEST; i++) {
+        int r, g, b, origR, origG, origB;
+        origR = r = random() % 255;
+        origG = g = random() % 255;
+        origB = b = random() % 255;
+        double c, m, y, k;
+
+        rgbToCMYK(r, g, b, &c, &m, &y, &k);
+        cmykToRGB(c, m, y, k, &r, &g, &b);
+
+        // have to subtract 1 to allow for minor rounding differences
+        assert_true(
+                (r == origR || r == origR - 1) &&
+                (g == origG || g == origG - 1) &&
+                (b == origB || b == origB - 1)
+        );
+    }
+}
+/**
+ * This function is used to determine if two integer
+ * numbers are "close enough" to each other; specifically
+ * if their difference is 1 or less.
+ */
+static int isCloseInt(int x, int y) {
+  return abs(x - y) <= 1;
+}
 
 /**
- * For CMYK applications, accuracy only needs to be to within
- * 0.01, but other applications may require finer accuracy.
+ * assert that for any random r, g, b, converting from RGB->CMYK->RGB
+ * doesn't change the values
  */
-const double EPSILON = 0.01;
+static void testRandomCyclicalEquality(void **state) {
+    srandom(time(NULL));
 
-/**
- * For randomized cyclical testing, this determines the number of
- * tests to run
- */
-const int RANDOM_TEST = 1000;
+    for (int i = 0; i < RANDOM_TEST; i++) {
+        int r, g, b, origR, origG, origB;
+        origR = r = random() % 255;
+        origG = g = random() % 255;
+        origB = b = random() % 255;
+        double c, m, y, k;
 
-/**
- * This function is used to determine if two floating
- * point numbers are "close enough" to each other based
- * on a small EPSILON value
- */
-static int isClose(double x, double y) {
-  return fabs(x - y) < EPSILON;
+        rgbToCMYK(r, g, b, &c, &m, &y, &k);
+        cmykToRGB(c, m, y, k, &r, &g, &b);
+
+        // have to subtract 1 to allow for minor rounding differences
+        assert_true(
+                (r == origR || r == origR - 1) &&
+                (g == origG || g == origG - 1) &&
+                (b == origB || b == origB - 1)
+        );
+    }
 }
