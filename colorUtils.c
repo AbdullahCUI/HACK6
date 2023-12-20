@@ -36,3 +36,18 @@ int rgbToCMYK(int r, int g, int b, double *c, double *m, double *y, double *k){
     return 0;
     
 }
+//FUNCTION: CONVERT THE CMYK TO RGB
+int cmykToRGB(double c, double m, double y, double k, int *r, int *g, int *b){
+    // ERROR HANDLING: to check valide input
+    if(c<0 || c>1 ||m<0 || m>1 ||y<0|| y>1 ||k<0 || k>1){
+        printf("Invalide cmyk input...\n");
+        return 1;
+    }
+    // Formula convert mcmyk to rgb
+    *r = round(255 * (1 - c) * (1 - k));
+    *g = round(255 * (1 - m) * (1 - k));
+    *b = round(255 * (1 - y) * (1 - k));
+    // valid
+    return 0;
+
+}
