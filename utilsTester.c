@@ -66,3 +66,19 @@ static void testRandomCyclicalEquality(void **state) {
         );
     }
 }
+/**
+ * This function tests rgbToCMYK's error handling of NULL
+ * values for its pass-by-reference parameters.  Each of
+ * the four parameters are tested independently.  The function
+ * should return a non-zero error value so we assert that the
+ * return value is not equal to zero.
+ *
+ */
+static void testRgbToCmykNull(void **state) {
+  double c, m, y, k;
+  assert_int_not_equal(rgbToCMYK(0,0,0,NULL,&m,&y,&k), 0);
+  assert_int_not_equal(rgbToCMYK(0,0,0,&c,NULL,&y,&k), 0);
+  assert_int_not_equal(rgbToCMYK(0,0,0,&c,&m,NULL,&k), 0);
+  assert_int_not_equal(rgbToCMYK(0,0,0,&c,&m,&y,NULL), 0);
+
+}
